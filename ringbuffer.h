@@ -3,31 +3,33 @@
 
 #include <stdint.h>
 
-#define RINGBUFFER_MAX_LEN 256
+#define RINGBUFFER_MAX_LEN (256)
+#define RINGBUFFER_MASK    (RINGBUFFER_MAX_LEN - 1)
 
+#if (RINGBUFFER_MAX_LEN > 256)
+#define RB_INDEX_TYPE uint16_t
+#else
+#define RB_INDEX_TYPE uint8_t
+#endif
+
+typedef RB_INDEX_TYPE rb_index_t;
 typedef struct 
 {
-	uint8_t*   buffer;
-    uint8_t    length;
-    uint8_t    new_bytes;
-	uint8_t    pop_index;
-	uint8_t    push_index;
+	uint8_t        buffer[RINGBUFFER_MAX_LEN];
+    rb_index_t     len;
+	rb_index_t     pop_index;
+	rb_index_t     push_index;
 } RingBuffer_t;
 
-uint8_t ringbuffer_init(RingBuffer_t* to_init, uint8_t length);
+extern uint8_t ringbuffer_reset(RingBuffer_t* to_init);
 
-void ringbuffer_destroy(RingBuffer_t* to_destroy);
+extern uint16_t ringbuffer_read(RingBuffer_t *readfrom, uint8_t *readto, rb_index_t amount);
 
-uint16_t ringbuffer_read(RingBuffer_t *readfrom, uint8_t *readto, uint8_t amount);
+extern uint16_t ringbuffer_write(RingBuffer_t *write_to, uint8_t *write_from, rb_index_t amount);
 
-uint16_t ringbuffer_write(RingBuffer_t *write_to, uint8_t *write_from, uint8_t amount);
+extern uint16_t ringbuffer_empty(RingBuffer_t *to_check);
 
-uint16_t ringbuffer_empty(RingBuffer_t *to_check);
+extern uint16_t ringbuffer_getlen(RingBuffer_t *to_check);
 
-uint16_t ringbuffer_full(RingBuffer_t *to_check);
-
-uint16_t ringbuffer_available_data(RingBuffer_t *to_check);
-
-uint16_t ringbuffer_available_space(RingBuffer_t *to_check);
 
 #endif
