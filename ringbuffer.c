@@ -1,12 +1,12 @@
 #include "ringbuffer.h"
-
+#include "rberrno.h"
 /* Private function prototypes*/
 
-uint8_t rb_pop(RingBuffer_t* to_pop);
-uint8_t rb_push(RingBuffer_t* to_push, uint8_t value);
+uint8_t rb_pop(rb_t* to_pop);
+uint8_t rb_push(rb_t* to_push, uint8_t value);
 
 /* Public function definitions */
-uint16_t ringbuffer_reset(RingBuffer_t* to_init)
+rberror_t rb_open(rb_t* to_init)
 {
     uint8_t i;
     if(to_init)
@@ -16,8 +16,8 @@ uint16_t ringbuffer_reset(RingBuffer_t* to_init)
                 to_init->buffer[i] = 0;        
             }
             to_init->len = 0;
-            to_init->pop_index = 0;
-            to_init->push_index = 0;
+            to_init->head = 0;
+            to_init->tail = 0;
     }
     else
     {
@@ -28,47 +28,45 @@ uint16_t ringbuffer_reset(RingBuffer_t* to_init)
 	return 0;
 }
 
-uint16_t ringbuffer_read(RingBuffer_t *readfrom, uint8_t *readto, buffer_size_t amount)
+rberror_t rb_read(rb_t *from, void *to, uint16_t amount)
 {
-    uint8_t i;
-    uint8_t limit;
-    // check if the destination buffer exists
-    if(readto)
+
+	return 0;
+}
+
+rberror_t rb_write(rb_t *to, void *from, uint16_t amount)
+{
+	return 0;
+}
+
+rberror_t rb_ioctl(rb_t *desc, uint32_t optname, uint32_t* optval)
+{
+    rberror_t result = RBERR_ERROR;
+    if(!desc)
     {
-        // check if the source buffer
-        if(readfrom)
-        {
+    
+    }
+    
+    
 
-        }
-    }
-    else
-    {
-        return -1;
-    }
-	return 0;
+    return 0;
 }
-
-uint16_t ringbuffer_write(RingBuffer_t *write_to, uint8_t *write_from, uint16_t amount)
+rberror_t rb_isempty(rb_t *to_check)
 {
 	return 0;
 }
 
-uint16_t ringbuffer_empty(RingBuffer_t *to_check)
-{
-	return 0;
-}
-
-uint16_t ringbuffer_full(RingBuffer_t *to_check)
+rberror_t rb_isfull(rb_t *to_check)
 {	
 	return 0;
 }
 
-uint16_t ringbuffer_available_data(RingBuffer_t *to_check)
+rberror_t rb_available_data(rb_t *to_check)
 {
 	return 0;
 }
 
-uint16_t ringbuffer_available_space(RingBuffer_t *to_check)
+rberror_t rb_available_space(rb_t *to_check)
 {
 	return 0;
 }
